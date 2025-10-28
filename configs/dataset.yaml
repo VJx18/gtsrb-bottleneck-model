@@ -1,0 +1,21 @@
+# This file contains all dataset-related settings
+
+dataset:
+  name: "GTSRB"
+
+# Data paths
+  paths:
+    root: "./data"
+    train_images: "./data/GTSRB/Final_Training/Images"
+    test_images: "./data/GTSRB 2/Final_Test/Images"
+    concept_annotations: "./data/concept_per_class.csv"
+    processed: "./data/processed"
+
+  # Dataset properties
+  num_classes: 43
+  image_size: [32, 32]  
+
+  # --- Train/Validation Split ---
+split:
+  validation_ratio: 0.2  # 20% for validation
+  random_seed: 42      # For reproducible results
