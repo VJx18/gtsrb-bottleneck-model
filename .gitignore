@@ -69,7 +69,7 @@ Thumbs.db
 # Data
 # Ignore all large data files, zip files, and image directories 
 
- data/*
+data/*
 !data/concept_per_class.csv
 !data/.gitignore
 
