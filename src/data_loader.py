@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
-class GTSRBDataset(Dataset):
+class GTSRBDataset(Dataset): ##manual iteration over batches don't offer shuffling which increases risks of overfitting so we use Dataset and dataloader
 
       def __init__(self, img_dir, concept_csv_path, 
   transform=None):  ##how and waht data to load 
@@ -19,8 +19,10 @@ class GTSRBDataset(Dataset):
               self.concept_df = None
               self.num_concepts = 15
 
-          self.image_paths = []
+          self.image_paths = []  ##populating to be done later
+        
           self.labels = []
+          self._load_images()
 
           if transform is None:   ##resizing to 32x32
               self.transform = transforms.Compose([
@@ -28,6 +30,8 @@ class GTSRBDataset(Dataset):
                   transforms.ToTensor(),  ##convert to tensor 
                   ##transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
               ])
+      def _load_images(self):
+            ##to be done later
 
       def __len__(self): ## total number of samples 
           return len(self.image_paths)
