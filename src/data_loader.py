@@ -27,11 +27,25 @@ class GTSRBDataset(Dataset): ##manual iteration over batches don't offer shuffli
           if transform is None:   ##resizing to 32x32
               self.transform = transforms.Compose([
                   transforms.Resize((32, 32)),
-                  transforms.ToTensor(),  ##convert to tensor 
+                  transforms.ToTensor(),  ##convert to tensor
                   ##transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
               ])
+
       def _load_images(self):
-            ##to be done later
+          if not os.path.exists(self.img_dir):
+              return
+
+          for class_folder in os.listdir(self.img_dir):
+              class_path = os.path.join(self.img_dir, class_folder)
+
+              if os.path.isdir(class_path):
+                  class_id = int(class_folder)
+
+                  for img_file in os.listdir(class_path):
+                      if img_file.endswith('.ppm') or img_file.endswith('.png'):
+                          img_path = os.path.join(class_path, img_file)
+                          self.image_paths.append(img_path)
+                          self.labels.append(class_id)
 
       def __len__(self): ## total number of samples 
           return len(self.image_paths)
