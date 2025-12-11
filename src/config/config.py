@@ -7,7 +7,7 @@ class DatasetConfig:
     root: str = "./data"
     train_images: str = "./data/GTSRB/Final_Training/Images"
     test_images: str = "./data/GTSRB 2/Final_Test/Images"
-    concept_csv: str = "./data/concept_per_class.csv"
+    concept_csv: str = "./data/concepts_per_class.csv"
     num_classes: int = 43
     image_size: Tuple[int, int] = (32, 32)
     val_split: float = 0.2

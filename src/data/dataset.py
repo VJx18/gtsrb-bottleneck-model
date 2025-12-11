@@ -56,8 +56,13 @@ class GTSRBDataset(Dataset):
 
         # for test split, use all data
         if self.split == 'test':
+            # load test images
+            for img_file in os.listdir(self.img_dir):
+                    if img_file.endswith('.ppm') or img_file.endswith('.png'):
+                        img_path = os.path.join(self.img_dir, img_file)
+                        all_image_paths.append(img_path)
             self.image_paths = all_image_paths
-            self.labels = all_labels
+            #self.labels = all_labels
             print(f"Loaded {len(self.image_paths)} test images")
             return
 
@@ -92,8 +97,8 @@ class GTSRBDataset(Dataset):
         label = self.labels[index]
 
         if self.concept_df is not None:
-            concept_row = self.concept_df[self.concept_df['ClassId'] == label]
-            concept_vector = torch.tensor(concept_row.iloc[:, 1:].values.flatten(), dtype=torch.float32)
+            concept_row = self.concept_df[self.concept_df['class_id'] == label]
+            concept_vector = torch.tensor(concept_row.iloc[:, 2:].values.flatten(), dtype=torch.float32) ##get concept vector values i.e read everyrow but skip 1st and 2nd column (because they are class_id and class_name)
         else:
             concept_vector = torch.zeros(self.num_concepts, dtype=torch.float32)
 
