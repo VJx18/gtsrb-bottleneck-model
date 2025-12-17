@@ -18,7 +18,7 @@ class GTSRBDataset(Dataset):
         # load concepts
         if os.path.exists(concept_csv_path):
             self.concept_df = pd.read_csv(concept_csv_path)
-            self.num_concepts = len(self.concept_df.columns) - 1
+            self.num_concepts = len(self.concept_df.columns) - 2 # Skip class_id AND class_name
         else:
             self.concept_df = None
             self.num_concepts = 15
