@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 from typing import Tuple
 
 @dataclass
@@ -33,8 +33,6 @@ class TrainingConfig:
 
 @dataclass
 class Config:
-   
-
-    dataset: DatasetConfig = DatasetConfig()
-    model: ModelConfig = ModelConfig()
-    training: TrainingConfig = TrainingConfig()
+    dataset: DatasetConfig = field(default_factory=DatasetConfig)
+    model: ModelConfig = field(default_factory=ModelConfig)
+    training: TrainingConfig = field(default_factory=TrainingConfig)
