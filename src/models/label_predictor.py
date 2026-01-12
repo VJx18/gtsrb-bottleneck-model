@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 class LabelPredictor(nn.Module):
-    def __init__(self, num_concepts=43, num_labels=43, dropout=0.3):
+    def __init__(self, num_concepts=43, num_classes=43, dropout=0.3):
 
         super(LabelPredictor, self).__init__()
 
@@ -12,7 +12,7 @@ class LabelPredictor(nn.Module):
             nn.Dropout(dropout),
             nn.Linear(256, 128),
             nn.ReLU(),      
-            nn.Linear(128, num_labels)   # output: label logits
+            nn.Linear(128, num_classes)   # output: label logits
         )
     
     def forward(self, x):
