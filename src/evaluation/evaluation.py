@@ -43,8 +43,8 @@ class evaluation:
         return precision, recall, f1, accuracy
 
 
-def evaluate_concept_predictor(checkpoint_path="./experiments/checkpoints/best_concept_model.pth"):
-    config = Config()
+def evaluate_concept_predictor(checkpoint_path="./experiments/checkpoints/best_concept_model.pth", config=Config()):
+    #config = Config()
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")#MPS for local Mac testing
     print(f"Using device: {device}")
 

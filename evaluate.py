@@ -1,0 +1,25 @@
+import argparse
+from src.config.config import Config
+from src.evaluation.evaluation import evaluate_concept_predictor
+
+def main():
+    parser = argparse.ArgumentParser(description='Evaluate CBM Model')
+    parser.add_argument('--checkpoint', type=str, default='./experiments/checkpoints/best_concept_model.pth', help='Path to model checkpoint')
+    parser.add_argument('--data_path_training', type=str, help='Path to training data directory')
+    parser.add_argument('--data_path_testing', type=str,  help='Path to test data directory')
+    args = parser.parse_args()
+
+    # update config if needed
+    config = Config()
+    config.training.checkpoint_dir = args.checkpoint
+    if args.data_path_training is not None:
+        config.dataset.train_images = args.data_path_training
+    if args.data_path_testing is not None:
+        config.dataset.test_images = args.data_path_testing
+
+    # evaluate model
+    results = evaluate_concept_predictor(args.checkpoint, config)
+    print(results)
+
+if __name__ == '__main__':
+    main()

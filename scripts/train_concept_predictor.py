@@ -8,9 +8,9 @@ from src.utils.stopper import EarlyStopper
 import os
 import json
 
-def train_concept_predictor():
+def train_concept_predictor(config=Config()):
    
-    config = Config()
+    # config = Config()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"running on: {device}")
     print("Loading GTSRB Data")
