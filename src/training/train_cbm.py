@@ -12,8 +12,9 @@ from src.models.cbm_model import CBMModel
 from src.utils.stopper import EarlyStopper
 
 
-def train_label_predictor():
-    config = Config()
+def train_label_predictor(config=Config()):
+    
+    # config = Config()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Running Stage 2 on: {device}")
 
