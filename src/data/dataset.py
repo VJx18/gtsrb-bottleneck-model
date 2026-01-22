@@ -7,7 +7,7 @@ from torchvision import transforms
 import numpy as np
 
 class GTSRBDataset(Dataset):
-    def __init__(self, img_dir, concept_csv_path, split='train', val_split=0.2, transform=None, seed=42):
+    def __init__(self, img_dir, concept_csv_path, class_id_test_path="", split='train', val_split=0.2, transform=None, seed=42):
       
         self.img_dir = img_dir
         self.split = split
@@ -22,6 +22,12 @@ class GTSRBDataset(Dataset):
         else:
             self.concept_df = None
             self.num_concepts = 15
+        
+        # get DataFrame for test images class IDs
+        if os.path.exists(class_id_test_path):
+            self.class_id_test_df = pd.read_csv(class_id_test_path)
+        else:
+            self.class_id_test_df = None
 
         self.image_paths = []
         self.labels = []
@@ -54,18 +60,6 @@ class GTSRBDataset(Dataset):
                         all_image_paths.append(img_path)
                         all_labels.append(class_id)
 
-        # for test split, use all data
-        if self.split == 'test':
-            # load test images
-            for img_file in os.listdir(self.img_dir):
-                    if img_file.endswith('.ppm') or img_file.endswith('.png'):
-                        img_path = os.path.join(self.img_dir, img_file)
-                        all_image_paths.append(img_path)
-            self.image_paths = all_image_paths
-            #self.labels = all_labels
-            print(f"Loaded {len(self.image_paths)} test images")
-            return
-
         # for train/val, split the data
         total_size = len(all_image_paths)
         indices = np.arange(total_size)
@@ -83,6 +77,25 @@ class GTSRBDataset(Dataset):
 
         self.image_paths = [all_image_paths[i] for i in split_indices]
         self.labels = [all_labels[i] for i in split_indices]
+
+        # for test split, use all data
+        if self.split == 'test':
+            # load test images
+            for img_file in os.listdir(self.img_dir):
+                    if img_file.endswith('.ppm') or img_file.endswith('.png'):
+                        img_path = os.path.join(self.img_dir, img_file)
+                        all_image_paths.append(img_path)
+            self.image_paths = all_image_paths
+            
+            # load test labels
+            if self.class_id_test_df is not None:
+                for i in range(len(self.class_id_test_df)):
+                    self.labels.append(self.class_id_test_df.iloc[i,:].to_string().split(';')[-1])
+            else:
+                self.labels = all_labels
+
+            print(f"Loaded {len(self.image_paths)} test images")
+            return
 
         print(f"Loaded {len(self.image_paths)} {self.split} images")
 
@@ -103,6 +116,10 @@ class GTSRBDataset(Dataset):
             concept_vector = torch.zeros(self.num_concepts, dtype=torch.float32)
 
         return image, (concept_vector, label)
+    
+    def get_class_ids(self):
+        all_labels = []
+
 
 
 def get_dataloaders(config):
@@ -128,7 +145,8 @@ def get_dataloaders(config):
         config.dataset.concept_csv,
         split='train',
         val_split=config.dataset.val_split,
-        transform=train_transform
+        transform=train_transform,
+        seed=config.dataset.seed
     )
 
     # create val dataset
@@ -137,15 +155,18 @@ def get_dataloaders(config):
         config.dataset.concept_csv,
         split='val',
         val_split=config.dataset.val_split,
-        transform=test_transform
+        transform=test_transform,
+        seed=config.dataset.seed
     )
 
     # create test dataset
     test_dataset = GTSRBDataset(
         config.dataset.test_images,
         config.dataset.concept_csv,
+        config.dataset.class_id_test_csv,
         split='test',
-        transform=test_transform
+        transform=test_transform,
+        seed=config.dataset.seed
     )
 
     # create loaders

@@ -14,7 +14,7 @@ def main():
 
     # update config
     config = Config()
-    torch.manual_seed(args.seed)
+    config.seed = torch.manual_seed(args.seed)
     if args.epochs is not None:
         config.training.epochs = args.epochs
     if args.lr is not None:

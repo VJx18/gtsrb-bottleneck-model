@@ -8,11 +8,13 @@ class DatasetConfig:
     train_images: str = "./data/GTSRB/Final_Training/Images"
     test_images: str = "./data/GTSRB 2/Final_Test/Images"
     concept_csv: str = "./data/concepts_per_class.csv"
+    class_id_test_csv: str = "./data/GT-final_test.csv"
     num_classes: int = 43
     image_size: Tuple[int, int] = (32, 32)
     val_split: float = 0.2
     batch_size: int = 64
     num_workers: int = 4
+    seed: int = 42
 
 @dataclass
 class ModelConfig:
