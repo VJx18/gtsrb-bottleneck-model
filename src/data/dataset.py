@@ -90,7 +90,8 @@ class GTSRBDataset(Dataset):
             # load test labels
             if self.class_id_test_df is not None:
                 for i in range(len(self.class_id_test_df)):
-                    self.labels.append(self.class_id_test_df.iloc[i,:].to_string().split(';')[-1])
+                    label = int(self.class_id_test_df.iloc[i,:].to_string().split(';')[-1])
+                    self.labels.append(label)
             else:
                 self.labels = all_labels
 
@@ -111,9 +112,11 @@ class GTSRBDataset(Dataset):
 
         if self.concept_df is not None:
             concept_row = self.concept_df[self.concept_df['class_id'] == label]
+            
             concept_vector = torch.tensor(concept_row.iloc[:, 2:].values.flatten(), dtype=torch.float32) ##get concept vector values i.e read everyrow but skip 1st and 2nd column (because they are class_id and class_name)
         else:
             concept_vector = torch.zeros(self.num_concepts, dtype=torch.float32)
+        
 
         return image, (concept_vector, label)
     

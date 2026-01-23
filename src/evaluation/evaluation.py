@@ -1,86 +1,197 @@
+import json
 import torch
-from torchmetrics.classification import MultilabelPrecision, MultilabelRecall, MultilabelF1Score
+import os
+import pandas as pd
+import numpy as np
 from src.config.config import Config
-from src.data.dataset import get_dataloaders
 from src.models.concept_predictor import ConceptPredictor
+from src.models.cbm_model import CBMModel
+from src.models.label_predictor import LabelPredictor
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, confusion_matrix, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-class evaluation:
+def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model.pth", config=Config(), output_dir="./experiments/evaluation/", num_examples=8, test_loader=None):
 
-    @staticmethod
-    def evaluate_concept(dataloader, model, num_labels):
+    if test_loader is None:
+        raise TypeError("Dataloader is of Type None")
 
-        device = next(model.parameters()).device
-
-        precision = MultilabelPrecision(num_labels=num_labels, average=None).to(device)
-        recall = MultilabelRecall(num_labels=num_labels, average=None).to(device)
-        f1 = MultilabelF1Score(num_labels=num_labels, average=None).to(device)
-        
-        model.eval()
-        all_preds = []
-        all_targets = []
-
-        with torch.no_grad():
-            for image, (concept_vector, label) in dataloader:
-                image, concept_vector = image.to(device), concept_vector.to(device)
-                logits = model(image)
-                pred_concept = (torch.sigmoid(logits) > 0.5).float()
-
-                precision.update(pred_concept, concept_vector)
-                recall.update(pred_concept, concept_vector)
-                f1.update(pred_concept, concept_vector)
-
-                all_preds.append(pred_concept.cpu())
-                all_targets.append(concept_vector.cpu())
-
-        precision = precision.compute()
-        recall = recall.compute()
-        f1 = f1.compute()
-
-        all_preds = torch.cat(all_preds, dim=0)
-        all_targets = torch.cat(all_targets, dim=0)
-        accuracy = (all_preds == all_targets).float().mean(dim=0)
-
-        return precision, recall, f1, accuracy
-
-
-def evaluate_concept_predictor(checkpoint_path="./experiments/checkpoints/best_concept_model.pth", config=Config()):
-    #config = Config()
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")#MPS for local Mac testing
     print(f"Using device: {device}")
 
-    train_loader, val_loader, test_loader = get_dataloaders(config)
-
+    if not os.path.exists(checkpoint_path):
+        raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}.")
+    
     checkpoint = torch.load(checkpoint_path, map_location=device)
-    num_concepts = checkpoint['fc2.weight'].shape[0]
+    num_concepts = config.model.num_concepts
 
-    model = ConceptPredictor(num_concepts=num_concepts, dropout=config.model.dropout)
+    # load CBM Model
+    concept_predictor = ConceptPredictor(num_concepts=num_concepts, dropout=config.model.dropout)
+    label_predictor = LabelPredictor(num_concepts=num_concepts, num_classes=config.dataset.num_classes, dropout=config.model.dropout)
+    model = CBMModel(concept_predictor, label_predictor)
     model.load_state_dict(checkpoint)
     model = model.to(device)
 
-    print(f"\nEvaluating {num_concepts} concepts")
-   
+    # create output directory if not exists
+    os.makedirs(output_dir, exist_ok=True)
 
-    precision, recall, f1, accuracy = evaluation.evaluate_concept(val_loader, model, num_concepts)
-    print(f"\nOverall Accuracy: {accuracy.mean():.4f}")
-    print(f"\nPer-Concept Accuracy:")
+    model.eval()
+    all_concept_preds = []
+    all_concept_targets = []
+    all_label_preds = []
+    all_label_targets = []
+    example_data = [] # für die Visualisierung
+
+    print("\n Starting CBM Model Evaluation...\n")
+
+    with torch.no_grad():
+        for batch_indx, (images, (concept_vectors, labels)) in enumerate(test_loader):
+            images, labels = images.to(device), labels.to(device)
+
+            # predict concepts and labels
+            concept_logits, label_logits = model(images)
+
+            # get predicted concepts and true concepts
+            concept_preds = (torch.sigmoid(concept_logits) > 0.5).cpu()
+            all_concept_preds.append(concept_preds)
+            all_concept_targets.append(concept_vectors.cpu())
+
+            # get predicted labels and true labels
+            label_preds = (torch.softmax(label_logits, dim=1)).cpu().argmax(dim=1)
+            all_label_preds.append(label_preds)
+            all_label_targets.append(labels)
+
+            # shows progress (how many batches are processed)
+            if (batch_indx + 1) % 20 == 0:
+                    print(f"Batch {batch_indx+1}/{len(test_loader)} processed.")
+
+            # collect example data for visualization
+            if len(example_data) < num_examples:
+                for i in range(images.size(0)):
+                    if len(example_data) >= num_examples:
+                        break
+                    example_data.append({
+                        "image": images[i].cpu(),
+                        "true_concepts": concept_vectors[i].cpu().tolist(),
+                        "predicted_concepts": concept_preds[i].tolist(),
+                        "true_label": int(labels[i].item()),
+                        "predicted_label": int(label_preds[i].item())
+                    })
     
-    for i, acc in enumerate(accuracy):
-        print(f"Concept {i:2d}: {acc:.4f}")
+    print("\n Evaluation completed. Computing and plotting metrics...\n")
 
-    best_idx = accuracy.argmax().item()
-    worst_idx = accuracy.argmin().item()
-     # print all metrics
-    print(f"Best Concept: {best_idx} (Accuracy: {accuracy[best_idx]:.4f})")
-    print(f"Worst Concept: {worst_idx} (Accuracy: {accuracy[worst_idx]:.4f})")
-    print(f"\nAverage Precision: {precision.mean():.4f}")
-    print(f"Average Recall: {recall.mean():.4f}")
-    print(f"Average F1 Score: {f1.mean():.4f}")
-    return {
-        'precision': precision.cpu().numpy(),
-        'recall': recall.cpu().numpy(),
-        'f1': f1.cpu().numpy(),
-        'accuracy': accuracy.cpu().numpy()
+    all_concept_preds   = torch.cat(all_concept_preds, axis=0)
+    all_concept_targets = torch.cat(all_concept_targets, axis=0)
+    all_label_preds     = torch.cat(all_label_preds, axis=0)
+    all_label_targets   = torch.cat(all_label_targets, axis=0)
+
+    # read concept csv file for concept and label names
+    concept_df = pd.read_csv(config.dataset.concept_csv)
+
+    # concept metrics
+    concept_acc = accuracy_score(all_concept_targets, all_concept_preds)
+    precision, recall, f1, _ = precision_recall_fscore_support(all_concept_targets, all_concept_preds, average=None, zero_division=0)
+
+    # get concept names
+    concept_names = concept_df.columns.tolist()[2:]  # skip first two columns (class_id and class_name)
+    
+    concept_metrics = {
+        "overall_accuracy": float(concept_acc),
+        "per concept": [
+            {
+            "concept_name": concept_names[i],
+            "precision": float(precision[i]),
+            "recall": float(recall[i]),
+            "f1_score": float(f1[i])
+            } for i in range(len(concept_names))
+        ]
     }
 
+    # label metrics
+    label_acc = accuracy_score(all_label_targets, all_label_preds)
+
+    # get names of traffic signs
+    class_names = concept_df["class_name"].tolist()
+
+    label_report = classification_report(all_label_targets, all_label_preds, target_names=class_names, output_dict=True, zero_division=0)
+    cm = confusion_matrix(all_label_targets, all_label_preds)
+
+    # plot confusion matrix
+    plt.figure(figsize=(14, 12))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+    plt.title("Confusion Matrix - Traffic Sign Classes")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    cm_path = os.path.join(output_dir, "confusion_matrix.png")
+    plt.savefig(cm_path)
+    plt.close()
+
+    # visualize example images
+    for idx, ex in enumerate(example_data):
+        fig = plt.figure(figsize=(14, 6))
+        img = ex["image"].cpu().permute(1, 2, 0).numpy()
+
+        if img.min() < 0:
+            img = (img + 1) / 2
+        img = np.clip(img, 0, 1)
+        ax1 = fig.add_subplot(1, 2, 1)
+        ax1.imshow(img)
+
+        ax1.set_title(f"True: {ex['true_label']} | Pred: {ex['predicted_label']}")
+        ax1.axis('off')
+        
+        # plotting true and predicted concepts
+        ax2 = fig.add_subplot(1, 2, 2)
+        ax2.axis('off')
+
+        # get true and predicted concepts
+        indices_true = [index for index, value in enumerate(ex['true_concepts']) if value == 1.0]
+        indices_pred = [index for index, value in enumerate(ex['predicted_concepts']) if value == 1.0]
+        all_indices = set(indices_true + indices_pred)
+        selected_concepts = [concept_names[i] for i in all_indices]
+
+        # create dataframe
+        data = {
+            "True Concepts": [ex['true_concepts'][i] for i in all_indices],
+            "Predicted Concepts": [ex['predicted_concepts'][i] for i in all_indices]
+        }
+        df = pd.DataFrame(index=selected_concepts, data=data)
+        df = df.astype(int)
+
+        # Farben: blau bei 1, weiß bei 0
+        cell_colors = [['#ADD8E6' if val == 1 else 'white' 
+                        for val in row] 
+                       for row in df.values]
+        
+        table = ax2.table(cellText=df.values, rowLabels=df.index, colLabels=df.columns, cellLoc='center', loc='center',cellColours=cell_colors, colWidths=[0.25, 0.25])
+        table.auto_set_font_size(False)
+        table.set_fontsize(11)
+        table.scale(1.4, 1.8)  # Spaltenbreite und Zeilenhöhe vergrößern
+
+        # Rahmen und Styling verbessern
+        table.auto_set_column_width(col=list(range(len(df.columns))))
+
+        ax2.set_title("True vs Predicted Concepts")
+        
+        plt.tight_layout()
+        ex_path = os.path.join(output_dir, f"example_{idx+1}.png")
+        plt.savefig(ex_path)
+        plt.close()
+
+        # ── Zusammenfassung ─────────────────────────────────────────
+    results = {
+        "label_accuracy": float(label_acc),
+        "label_classification_report": label_report,
+        "concept_metrics": concept_metrics,
+        "num_test_samples": len(all_label_targets),
+        "confusion_matrix_path": cm_path,
+        "example_plots": [os.path.join(output_dir, f"example_{i+1}.png") for i in range(len(example_data))]
+    }
+
+    # JSON speichern
+    with open(os.path.join(output_dir, "cbm_evaluation.json"), "w") as f:
+        json.dump(results, f, indent=2)
+
+
 if __name__ == "__main__":
-    evaluate_concept_predictor()
+    evaluate_cbm_model()

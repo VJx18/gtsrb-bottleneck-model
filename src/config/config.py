@@ -20,7 +20,7 @@ class DatasetConfig:
 class ModelConfig:
     ##Configuration for model architecture parameters
     backbone: str = "efficientnet_v2_s"
-    num_concepts: int = 15
+    num_concepts: int = 43
     dropout: float = 0.3
 
 @dataclass
