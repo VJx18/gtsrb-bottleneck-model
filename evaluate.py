@@ -20,7 +20,7 @@ def main():
 
     # evaluate model
     _, val_loader, test_loader = get_dataloaders(config)
-    evaluate_cbm_model(checkpoint_path=args.checkpoint, config=config, test_loader=test_loader)
+    evaluate_cbm_model(config=config, test_loader=test_loader)
 
 if __name__ == '__main__':
     main()

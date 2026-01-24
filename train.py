@@ -10,6 +10,7 @@ def main():
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--lr', type=float, help='Learning rate (overrides config)')
     parser.add_argument('--epochs', type=int, help='Number of epochs (overrides config)')
+    parser.add_argument('--patience', type=int, help='Early stopping patience (overrides config)')
     args = parser.parse_args()
 
     # update config
@@ -19,6 +20,8 @@ def main():
         config.training.epochs = args.epochs
     if args.lr is not None:
         config.training.lr = args.lr
+    if args.patience is not None:
+        config.training.patience = args.patience
 
     # train both stages
     train_concept_predictor(config)

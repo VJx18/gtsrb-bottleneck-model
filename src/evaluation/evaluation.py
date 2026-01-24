@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support, con
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model.pth", config=Config(), output_dir="./experiments/evaluation/", num_examples=8, test_loader=None):
+def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
 
     if test_loader is None:
         raise TypeError("Dataloader is of Type None")
@@ -19,10 +19,12 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")#MPS for local Mac testing
     print(f"Using device: {device}")
 
+    checkpoint_path = config.training.checkpoint_dir
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}.")
     
     checkpoint = torch.load(checkpoint_path, map_location=device)
+
     num_concepts = config.model.num_concepts
 
     # load CBM Model
@@ -31,9 +33,6 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
     model = CBMModel(concept_predictor, label_predictor)
     model.load_state_dict(checkpoint)
     model = model.to(device)
-
-    # create output directory if not exists
-    os.makedirs(output_dir, exist_ok=True)
 
     model.eval()
     all_concept_preds = []
@@ -122,7 +121,7 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
     plt.title("Confusion Matrix - Traffic Sign Classes")
     plt.xlabel("Predicted")
     plt.ylabel("True")
-    cm_path = os.path.join(output_dir, "confusion_matrix.png")
+    cm_path = os.path.join(checkpoint_path, "confusion_matrix.png")
     plt.savefig(cm_path)
     plt.close()
 
@@ -174,7 +173,7 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
         ax2.set_title("True vs Predicted Concepts")
         
         plt.tight_layout()
-        ex_path = os.path.join(output_dir, f"example_{idx+1}.png")
+        ex_path = os.path.join(checkpoint_path, f"example_{idx+1}.png")
         plt.savefig(ex_path)
         plt.close()
 
@@ -185,11 +184,11 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
         "concept_metrics": concept_metrics,
         "num_test_samples": len(all_label_targets),
         "confusion_matrix_path": cm_path,
-        "example_plots": [os.path.join(output_dir, f"example_{i+1}.png") for i in range(len(example_data))]
+        "example_plots": [os.path.join(checkpoint_path, f"example_{i+1}.png") for i in range(len(example_data))]
     }
 
     # JSON speichern
-    with open(os.path.join(output_dir, "cbm_evaluation.json"), "w") as f:
+    with open(os.path.join(checkpoint_path, "cbm_evaluation.json"), "w") as f:
         json.dump(results, f, indent=2)
 
 
