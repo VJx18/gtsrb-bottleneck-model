@@ -11,10 +11,11 @@ class EarlyStopper:
     def early_stop(self, val_loss, model):
  
         if (val_loss < self.min_val_loss + self.min_delta):
+            old_val_loss = self.min_val_loss
             self.min_val_loss = val_loss
             self.best_model_state = model.state_dict()
             self.counter = 0
-            print(f"Validation loss improved from {val_loss:.6f} to {self.min_val_loss:.6f}. Saving best model...")
+            print(f"Validation loss improved from {old_val_loss:.6f} to {self.min_val_loss:.6f}. Saving best model...")
         elif (val_loss >= self.min_val_loss + self.min_delta):
             self.counter += 1
             print(f"EarlyStopping counter: {self.counter} out of {self.patience}")
