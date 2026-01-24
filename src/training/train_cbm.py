@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import os
 import json
-
+import matplotlib.pyplot as plt
 from src.config.config import Config
 from src.data.dataset import get_dataloaders
 from src.models.concept_predictor import ConceptPredictor
@@ -147,6 +147,17 @@ def train_label_predictor(config=Config()):
     with open(os.path.join(config.training.checkpoint_dir, "history_cbm.json"), 'w') as f:
         json.dump({'train_loss': train_losses, 'val_loss': val_losses, 'val_acc': val_accuracies}, f)
 
+    # Plot Validation and Loss Curves
+    plt.figure(figsize=(12, 10))
+    plt.plot(train_losses, label="Training Loss")
+    plt.plot(val_losses, label="Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.title("Training and Validation Loss Curves - Label Predictor")
+    loss_curve_path = os.path.join(config.training.checkpoint_dir, "loss_curves_label.png")
+    plt.savefig(loss_curve_path)
+    plt.close()
 
 if __name__ == "__main__":
     train_label_predictor()
