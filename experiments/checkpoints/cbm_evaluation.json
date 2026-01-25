@@ -1,0 +1,551 @@
+{
+  "label_accuracy": 0.9422847164782648,
+  "label_classification_report": {
+    "Speed limit (20km/h)": {
+      "precision": 0.6229508196721312,
+      "recall": 0.7169811320754716,
+      "f1-score": 0.6666666666666666,
+      "support": 53.0
+    },
+    "Speed limit (30km/h)": {
+      "precision": 0.9196141479099679,
+      "recall": 0.9137380191693291,
+      "f1-score": 0.9166666666666666,
+      "support": 626.0
+    },
+    "Speed limit (50km/h)": {
+      "precision": 0.8877400295420975,
+      "recall": 0.931782945736434,
+      "f1-score": 0.9092284417549168,
+      "support": 645.0
+    },
+    "Speed limit (60km/h)": {
+      "precision": 0.9587912087912088,
+      "recall": 0.953551912568306,
+      "f1-score": 0.9561643835616438,
+      "support": 366.0
+    },
+    "Speed limit (70km/h)": {
+      "precision": 0.9801801801801802,
+      "recall": 0.9379310344827586,
+      "f1-score": 0.958590308370044,
+      "support": 580.0
+    },
+    "Speed limit (80km/h)": {
+      "precision": 0.9481481481481482,
+      "recall": 0.9499072356215214,
+      "f1-score": 0.9490268767377201,
+      "support": 539.0
+    },
+    "End of speed limit (80km/h)": {
+      "precision": 0.990990990990991,
+      "recall": 0.8461538461538461,
+      "f1-score": 0.9128630705394191,
+      "support": 130.0
+    },
+    "Speed limit (100km/h)": {
+      "precision": 0.9788359788359788,
+      "recall": 0.9635416666666666,
+      "f1-score": 0.9711286089238845,
+      "support": 384.0
+    },
+    "Speed limit (120km/h)": {
+      "precision": 0.9836065573770492,
+      "recall": 0.9549071618037135,
+      "f1-score": 0.9690444145356663,
+      "support": 377.0
+    },
+    "No passing": {
+      "precision": 0.9975,
+      "recall": 0.9803439803439803,
+      "f1-score": 0.9888475836431226,
+      "support": 407.0
+    },
+    "No passing for vehicles over 3.5 metric tons": {
+      "precision": 0.986159169550173,
+      "recall": 0.991304347826087,
+      "f1-score": 0.9887250650477016,
+      "support": 575.0
+    },
+    "Right of way at the next intersection": {
+      "precision": 0.9342465753424658,
+      "recall": 0.9266304347826086,
+      "f1-score": 0.9304229195088677,
+      "support": 368.0
+    },
+    "Priority road": {
+      "precision": 0.9967105263157895,
+      "recall": 0.9918166939443536,
+      "f1-score": 0.9942575881870386,
+      "support": 611.0
+    },
+    "Yield": {
+      "precision": 0.9241071428571429,
+      "recall": 0.9951923076923077,
+      "f1-score": 0.9583333333333334,
+      "support": 624.0
+    },
+    "Stop": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 233.0
+    },
+    "No vehicles": {
+      "precision": 0.9528795811518325,
+      "recall": 1.0,
+      "f1-score": 0.9758713136729222,
+      "support": 182.0
+    },
+    "Vehicles over 3.5 metric tons prohibited": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 124.0
+    },
+    "No entry": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 311.0
+    },
+    "General caution": {
+      "precision": 0.9963503649635036,
+      "recall": 0.8076923076923077,
+      "f1-score": 0.8921568627450981,
+      "support": 338.0
+    },
+    "Dangerous curve to the left": {
+      "precision": 0.8545454545454545,
+      "recall": 0.9591836734693877,
+      "f1-score": 0.9038461538461539,
+      "support": 49.0
+    },
+    "Dangerous curve to the right": {
+      "precision": 0.9078947368421053,
+      "recall": 0.9452054794520548,
+      "f1-score": 0.9261744966442953,
+      "support": 73.0
+    },
+    "Double curve": {
+      "precision": 0.9193548387096774,
+      "recall": 0.76,
+      "f1-score": 0.8321167883211679,
+      "support": 75.0
+    },
+    "Bumpy road": {
+      "precision": 0.9733333333333334,
+      "recall": 0.7448979591836735,
+      "f1-score": 0.8439306358381503,
+      "support": 98.0
+    },
+    "Slippery road": {
+      "precision": 0.8082191780821918,
+      "recall": 0.9076923076923077,
+      "f1-score": 0.855072463768116,
+      "support": 130.0
+    },
+    "Road narrows on the right": {
+      "precision": 0.967741935483871,
+      "recall": 0.8695652173913043,
+      "f1-score": 0.916030534351145,
+      "support": 69.0
+    },
+    "Road work": {
+      "precision": 0.8229166666666666,
+      "recall": 0.9541062801932367,
+      "f1-score": 0.883668903803132,
+      "support": 414.0
+    },
+    "Traffic signals": {
+      "precision": 0.9354838709677419,
+      "recall": 0.9539473684210527,
+      "f1-score": 0.9446254071661238,
+      "support": 152.0
+    },
+    "Pedestrians": {
+      "precision": 0.4603174603174603,
+      "recall": 0.5087719298245614,
+      "f1-score": 0.48333333333333334,
+      "support": 57.0
+    },
+    "Children crossing": {
+      "precision": 0.847682119205298,
+      "recall": 0.9481481481481482,
+      "f1-score": 0.8951048951048951,
+      "support": 135.0
+    },
+    "Bicycles crossing": {
+      "precision": 0.9518072289156626,
+      "recall": 0.9518072289156626,
+      "f1-score": 0.9518072289156626,
+      "support": 83.0
+    },
+    "Beware of ice/snow": {
+      "precision": 0.8588235294117647,
+      "recall": 0.5658914728682171,
+      "f1-score": 0.6822429906542056,
+      "support": 129.0
+    },
+    "Wild animals crossing": {
+      "precision": 0.9911504424778761,
+      "recall": 0.9781659388646288,
+      "f1-score": 0.9846153846153847,
+      "support": 229.0
+    },
+    "End of all speed limits": {
+      "precision": 0.7878787878787878,
+      "recall": 1.0,
+      "f1-score": 0.8813559322033898,
+      "support": 52.0
+    },
+    "Turn right ahead": {
+      "precision": 0.9772727272727273,
+      "recall": 0.9502762430939227,
+      "f1-score": 0.9635854341736695,
+      "support": 181.0
+    },
+    "Turn left ahead": {
+      "precision": 0.9083333333333333,
+      "recall": 1.0,
+      "f1-score": 0.9519650655021834,
+      "support": 109.0
+    },
+    "Ahead only": {
+      "precision": 0.9245810055865922,
+      "recall": 0.976401179941003,
+      "f1-score": 0.9497847919655668,
+      "support": 339.0
+    },
+    "Go straight or right": {
+      "precision": 0.9425287356321839,
+      "recall": 0.8367346938775511,
+      "f1-score": 0.8864864864864865,
+      "support": 98.0
+    },
+    "Go straight or left": {
+      "precision": 0.8958333333333334,
+      "recall": 0.86,
+      "f1-score": 0.8775510204081632,
+      "support": 50.0
+    },
+    "Keep right": {
+      "precision": 0.9982758620689656,
+      "recall": 0.9666110183639399,
+      "f1-score": 0.9821882951653944,
+      "support": 599.0
+    },
+    "Keep left": {
+      "precision": 0.9506172839506173,
+      "recall": 0.9871794871794872,
+      "f1-score": 0.9685534591194969,
+      "support": 78.0
+    },
+    "Roundabout mandatory": {
+      "precision": 0.8351648351648352,
+      "recall": 0.9620253164556962,
+      "f1-score": 0.8941176470588236,
+      "support": 79.0
+    },
+    "End of no passing": {
+      "precision": 0.9090909090909091,
+      "recall": 1.0,
+      "f1-score": 0.9523809523809523,
+      "support": 50.0
+    },
+    "End of no passing by vehicles over 3.5 metric tons": {
+      "precision": 0.9857142857142858,
+      "recall": 0.8625,
+      "f1-score": 0.92,
+      "support": 80.0
+    },
+    "accuracy": 0.9422847164782648,
+    "macro avg": {
+      "precision": 0.9179854259445192,
+      "recall": 0.9141996737185006,
+      "f1-score": 0.9132216838307117,
+      "support": 10881.0
+    },
+    "weighted avg": {
+      "precision": 0.9449906025036291,
+      "recall": 0.9422847164782648,
+      "f1-score": 0.9420240061544491,
+      "support": 10881.0
+    }
+  },
+  "concept_metrics": {
+    "overall_accuracy": 0.9363110008271298,
+    "per concept": [
+      {
+        "concept_name": "main_color_white",
+        "precision": 0.9992669517409896,
+        "recall": 0.998291224215794,
+        "f1_score": 0.9987788496763952
+      },
+      {
+        "concept_name": "main_color_red",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0
+      },
+      {
+        "concept_name": "main_color_blue",
+        "precision": 0.9922279792746114,
+        "recall": 0.9993476842791911,
+        "f1_score": 0.9957751056223595
+      },
+      {
+        "concept_name": "main_color_yellow",
+        "precision": 0.9967105263157895,
+        "recall": 0.9918166939443536,
+        "f1_score": 0.9942575881870386
+      },
+      {
+        "concept_name": "border_color_white",
+        "precision": 0.9976218787158145,
+        "recall": 0.9940758293838863,
+        "f1_score": 0.9958456973293769
+      },
+      {
+        "concept_name": "border_color_red",
+        "precision": 0.9991122384273938,
+        "recall": 0.9996193376475067,
+        "f1_score": 0.9993657237092477
+      },
+      {
+        "concept_name": "shape_round",
+        "precision": 0.9998573262947639,
+        "recall": 0.9991445680068435,
+        "f1_score": 0.999500820081295
+      },
+      {
+        "concept_name": "shape_triangular",
+        "precision": 0.9963708347080171,
+        "recall": 0.9990076083360899,
+        "f1_score": 0.9976874793524942
+      },
+      {
+        "concept_name": "shape_square",
+        "precision": 0.9967105263157895,
+        "recall": 0.9918166939443536,
+        "f1_score": 0.9942575881870386
+      },
+      {
+        "concept_name": "shape_octagonal",
+        "precision": 1.0,
+        "recall": 0.9914163090128756,
+        "f1_score": 0.9956896551724138
+      },
+      {
+        "concept_name": "number_0",
+        "precision": 0.9986387149469099,
+        "recall": 0.9913513513513513,
+        "f1_score": 0.994981689949817
+      },
+      {
+        "concept_name": "number_1",
+        "precision": 0.9986541049798116,
+        "recall": 0.9750328515111695,
+        "f1_score": 0.9867021276595744
+      },
+      {
+        "concept_name": "number_2",
+        "precision": 0.9370629370629371,
+        "recall": 0.9348837209302325,
+        "f1_score": 0.9359720605355064
+      },
+      {
+        "concept_name": "number_3",
+        "precision": 0.9225806451612903,
+        "recall": 0.9137380191693291,
+        "f1_score": 0.9181380417335474
+      },
+      {
+        "concept_name": "number_5",
+        "precision": 0.8940298507462686,
+        "recall": 0.9286821705426357,
+        "f1_score": 0.9110266159695818
+      },
+      {
+        "concept_name": "number_6",
+        "precision": 0.9486486486486486,
+        "recall": 0.9590163934426229,
+        "f1_score": 0.9538043478260869
+      },
+      {
+        "concept_name": "number_7",
+        "precision": 0.980072463768116,
+        "recall": 0.9327586206896552,
+        "f1_score": 0.9558303886925795
+      },
+      {
+        "concept_name": "number_8",
+        "precision": 0.9554531490015361,
+        "recall": 0.929745889387145,
+        "f1_score": 0.9424242424242424
+      },
+      {
+        "concept_name": "symbol_car",
+        "precision": 0.9736,
+        "recall": 0.9798711755233495,
+        "f1_score": 0.9767255216693419
+      },
+      {
+        "concept_name": "symbol_truck",
+        "precision": 0.9896238651102465,
+        "recall": 0.9794608472400513,
+        "f1_score": 0.984516129032258
+      },
+      {
+        "concept_name": "symbol_stop",
+        "precision": 1.0,
+        "recall": 0.9914163090128756,
+        "f1_score": 0.9956896551724138
+      },
+      {
+        "concept_name": "symbol_animal",
+        "precision": 0.9955357142857143,
+        "recall": 0.9737991266375546,
+        "f1_score": 0.9845474613686535
+      },
+      {
+        "concept_name": "symbol_ice",
+        "precision": 0.8152173913043478,
+        "recall": 0.5813953488372093,
+        "f1_score": 0.6787330316742082
+      },
+      {
+        "concept_name": "symbol_children",
+        "precision": 0.8590604026845637,
+        "recall": 0.9481481481481482,
+        "f1_score": 0.9014084507042254
+      },
+      {
+        "concept_name": "symbol_pedestrian",
+        "precision": 0.8046511627906977,
+        "recall": 0.9010416666666666,
+        "f1_score": 0.8501228501228502
+      },
+      {
+        "concept_name": "symbol_construction_site",
+        "precision": 0.8191268191268192,
+        "recall": 0.9516908212560387,
+        "f1_score": 0.8804469273743016
+      },
+      {
+        "concept_name": "symbol_attention",
+        "precision": 0.996309963099631,
+        "recall": 0.7988165680473372,
+        "f1_score": 0.8866995073891626
+      },
+      {
+        "concept_name": "symbol_traffic_lights",
+        "precision": 0.9230769230769231,
+        "recall": 0.9473684210526315,
+        "f1_score": 0.935064935064935
+      },
+      {
+        "concept_name": "symbol_bicycle",
+        "precision": 0.9634146341463414,
+        "recall": 0.9518072289156626,
+        "f1_score": 0.9575757575757575
+      },
+      {
+        "concept_name": "symbol_narrow_point",
+        "precision": 0.9836065573770492,
+        "recall": 0.8695652173913043,
+        "f1_score": 0.9230769230769231
+      },
+      {
+        "concept_name": "symbol_uneven",
+        "precision": 0.9733333333333334,
+        "recall": 0.7448979591836735,
+        "f1_score": 0.8439306358381503
+      },
+      {
+        "concept_name": "symbol_diagonal_stripes",
+        "precision": 1.0,
+        "recall": 0.9743589743589743,
+        "f1_score": 0.987012987012987
+      },
+      {
+        "concept_name": "symbol_right_of_way",
+        "precision": 0.9439775910364145,
+        "recall": 0.9157608695652174,
+        "f1_score": 0.9296551724137931
+      },
+      {
+        "concept_name": "symbol_horizontal_bar",
+        "precision": 0.9936102236421726,
+        "recall": 1.0,
+        "f1_score": 0.9967948717948718
+      },
+      {
+        "concept_name": "symbol_curve_left",
+        "precision": 0.8392857142857143,
+        "recall": 0.9591836734693877,
+        "f1_score": 0.8952380952380953
+      },
+      {
+        "concept_name": "symbol_curve_right",
+        "precision": 0.9090909090909091,
+        "recall": 0.958904109589041,
+        "f1_score": 0.9333333333333333
+      },
+      {
+        "concept_name": "symbol_double_curve",
+        "precision": 0.8656716417910447,
+        "recall": 0.7733333333333333,
+        "f1_score": 0.8169014084507042
+      },
+      {
+        "concept_name": "symbol_arrow_right",
+        "precision": 0.9765625,
+        "recall": 0.8960573476702509,
+        "f1_score": 0.9345794392523364
+      },
+      {
+        "concept_name": "symbol_arrow_left",
+        "precision": 0.9047619047619048,
+        "recall": 0.9559748427672956,
+        "f1_score": 0.9296636085626911
+      },
+      {
+        "concept_name": "symbol_arrow_straight",
+        "precision": 0.9797160243407708,
+        "recall": 0.9917864476386037,
+        "f1_score": 0.9857142857142858
+      },
+      {
+        "concept_name": "symbol_arrow_bottom_right",
+        "precision": 0.9982638888888888,
+        "recall": 0.9599332220367279,
+        "f1_score": 0.9787234042553191
+      },
+      {
+        "concept_name": "symbol_arrow_bottom_left",
+        "precision": 0.9625,
+        "recall": 0.9871794871794872,
+        "f1_score": 0.9746835443037974
+      },
+      {
+        "concept_name": "symbol_arrow_roundabout",
+        "precision": 0.8539325842696629,
+        "recall": 0.9620253164556962,
+        "f1_score": 0.9047619047619048
+      }
+    ]
+  },
+  "num_test_samples": 10881,
+  "confusion_matrix_path": "./experiments/checkpoints\\confusion_matrix.png",
+  "example_plots": [
+    "./experiments/checkpoints\\example_1.png",
+    "./experiments/checkpoints\\example_2.png",
+    "./experiments/checkpoints\\example_3.png",
+    "./experiments/checkpoints\\example_4.png",
+    "./experiments/checkpoints\\example_5.png",
+    "./experiments/checkpoints\\example_6.png",
+    "./experiments/checkpoints\\example_7.png",
+    "./experiments/checkpoints\\example_8.png"
+  ]
+}

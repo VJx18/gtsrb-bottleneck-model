@@ -60,6 +60,7 @@ Thumbs.db
 # --- Project Specific Data (GTSRB) ---
 data/*
 !data/concept_per_class.csv
+!GT-final_test.csv
 !data/.gitignore
 !data/.gitkeep
 
@@ -78,6 +79,8 @@ experiments/checkpoints/*
 !experiments/checkpoints/.gitkeep
 !experiments/checkpoints/history.json
 !experiments/checkpoints/history_cbm.json
+!experiments/checkpoints/*.png
+!experiments/checkpoints/cbm_evaluation.json
 
 # --- Jupyter Notebooks ---
 .ipynb_checkpoints
