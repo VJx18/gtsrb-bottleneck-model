@@ -81,6 +81,8 @@ experiments/checkpoints/*
 !experiments/checkpoints/history_cbm.json
 !experiments/checkpoints/*.png
 !experiments/checkpoints/cbm_evaluation.json
+!experiments/checkpoints/best_concept_model.pth
+!experiments/checkpoints/best_cbm_model.pth
 
 # --- Jupyter Notebooks ---
 .ipynb_checkpoints
