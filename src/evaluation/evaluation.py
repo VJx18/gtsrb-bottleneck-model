@@ -19,6 +19,7 @@ def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")#MPS for local Mac testing
     print(f"Using device: {device}")
 
+    output_dir = "./experiments/checkpoints"
     checkpoint_path = config.training.checkpoint_dir
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}.")
@@ -121,7 +122,7 @@ def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
     plt.title("Confusion Matrix - Traffic Sign Classes")
     plt.xlabel("Predicted")
     plt.ylabel("True")
-    cm_path = os.path.join(checkpoint_path, "confusion_matrix.png")
+    cm_path = os.path.join(output_dir, "confusion_matrix.png")
     plt.savefig(cm_path)
     plt.close()
 
@@ -173,7 +174,7 @@ def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
         ax2.set_title("True vs Predicted Concepts")
         
         plt.tight_layout()
-        ex_path = os.path.join(checkpoint_path, f"example_{idx+1}.png")
+        ex_path = os.path.join(output_dir, f"example_{idx+1}.png")
         plt.savefig(ex_path)
         plt.close()
 
@@ -184,11 +185,11 @@ def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
         "concept_metrics": concept_metrics,
         "num_test_samples": len(all_label_targets),
         "confusion_matrix_path": cm_path,
-        "example_plots": [os.path.join(checkpoint_path, f"example_{i+1}.png") for i in range(len(example_data))]
+        "example_plots": [os.path.join(output_dir, f"example_{i+1}.png") for i in range(len(example_data))]
     }
 
     # JSON speichern
-    with open(os.path.join(checkpoint_path, "cbm_evaluation.json"), "w") as f:
+    with open(os.path.join(output_dir, "cbm_evaluation.json"), "w") as f:
         json.dump(results, f, indent=2)
 
 

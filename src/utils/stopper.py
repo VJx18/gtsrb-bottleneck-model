@@ -1,16 +1,17 @@
 
 
 class EarlyStopper:
-    def __init__(self, patience=6, min_delta=0.01):
+    def __init__(self, patience=6, min_delta=0.001):
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
         self.best_loss = float('inf')
         self.best_model_state = None
+        print(f"EarlyStopping initialized with patience={patience}, min_delta={min_delta}")
 
     def early_stop(self, val_loss, model):
 
-        if (val_loss < self.best_score - self.min_delta):
+        if (val_loss < self.best_loss - self.min_delta):
             self.best_loss = val_loss
             self.best_model_state = model.state_dict()
             self.counter = 0
