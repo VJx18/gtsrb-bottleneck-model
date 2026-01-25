@@ -26,9 +26,9 @@ class ModelConfig:
 @dataclass
 class TrainingConfig:
     ##Configuration for training hyperparameters and environment
-    lr: float = 1e-3
+    lr: float = 1e-4
     epochs: int = 60 #trying to find optimal epoch
-    patience: int = 10
+    patience: int = 6
     device: str = "cuda"
     checkpoint_dir: str = "./experiments/checkpoints" ##for saving model weights
 

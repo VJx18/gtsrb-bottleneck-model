@@ -23,6 +23,7 @@ def main():
     if args.patience is not None:
         config.training.patience = args.patience
 
+    print(f'Training with learning rate: {config.training.lr}, epochs: {config.training.epochs}, patience: {config.training.patience}, seed: {args.seed}, ')
     # train both stages
     train_concept_predictor(config)
     train_label_predictor(config)
