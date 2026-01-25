@@ -5,20 +5,16 @@ class EarlyStopper:
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
+        self.best_loss = float('inf')
         self.best_model_state = None
-        self.best_score = None
 
     def early_stop(self, val_loss, model):
-        
-        score = val_loss
-        if self.best_score is None:
-            self.best_score = score
-            self.best_model_state = model.state_dict()
-        elif (score < self.best_score - self.min_delta):
-            self.best_score = score
+
+        if (val_loss < self.best_score - self.min_delta):
+            self.best_loss = val_loss
             self.best_model_state = model.state_dict()
             self.counter = 0
-            print(f"Validation loss improved to {self.best_score:.6f}. Saving best model...")      
+            print(f"Validation loss improved to {self.best_loss:.6f}. Saving best model...")
         else:
             self.counter += 1
             print(f"EarlyStopping counter: {self.counter} out of {self.patience}")
