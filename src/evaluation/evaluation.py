@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support, con
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model.pth", config=Config(), output_dir="./experiments/evaluation/", num_examples=8, test_loader=None):
+def evaluate_cbm_model(config=Config(), num_examples=8, test_loader=None):
 
     if test_loader is None:
         raise TypeError("Dataloader is of Type None")
@@ -19,10 +19,13 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")#MPS for local Mac testing
     print(f"Using device: {device}")
 
+    output_dir = "./experiments/checkpoints"
+    checkpoint_path = config.training.checkpoint_dir
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}.")
     
     checkpoint = torch.load(checkpoint_path, map_location=device)
+
     num_concepts = config.model.num_concepts
 
     # load CBM Model
@@ -31,9 +34,6 @@ def evaluate_cbm_model(checkpoint_path="./experiments/checkpoints/best_cbm_model
     model = CBMModel(concept_predictor, label_predictor)
     model.load_state_dict(checkpoint)
     model = model.to(device)
-
-    # create output directory if not exists
-    os.makedirs(output_dir, exist_ok=True)
 
     model.eval()
     all_concept_preds = []
