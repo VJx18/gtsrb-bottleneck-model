@@ -1,12 +1,8 @@
-# Byte-compiled / optimized / DLL files
+# --- Python & Build Artifacts ---
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -26,14 +22,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-
-
-# Installer logs
+# --- Installer logs ---
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# --- Unit test / Coverage ---
 .pytest_cache/
 .coverage
 .coverage.*
@@ -44,7 +37,7 @@ coverage.xml
 .hypothesis/
 .tox/
 
-# Virtual Environments
+# --- Virtual Environments ---
 .env
 .venv
 env/
@@ -54,112 +47,37 @@ VENV/
 */env/
 */venv/
 
-# IDE / Editor files
+# --- IDE / Editor files ---
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# OS-specific files
+# --- OS-specific files ---
 .DS_Store
 Thumbs.db
 
-#ML 
-
-# Data
-# Ignore all large data files, zip files, and image directories 
-
+# --- Project Specific Data (GTSRB) ---
 data/*
 !data/concept_per_class.csv
 !data/.gitignore
+!data/.gitkeep
 
-# Model Checkpoints & Logs
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# --- Training Artifacts & Models ---
+# Ignoriere Checkpoints (die großen .pth Dateien)
+*.pth
+*.pt
+*.ckpt
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-.pytest_cache/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.tox/
-
-# Virtual Environments
-.env
-.venv
-env/
-venv/
-ENV/
-VENV/
-*/env/
-*/venv/
-
-# IDE / Editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-#ML 
-
-# Data
-# Ignore all large data files, zip files, and image directories 
-
-data/*
-!data/concept_per_class.csv
-!data/.gitignore
-
-# Model Checkpoints & Logs
-models/*.pth
-models/*.pt
-models/*.ckpt
+# Ignoriere Trainings-Logs aber behalte history.json für Plots
 logs/
 *.log
 
-# Jupyter Notebooks
-.ipynb_checkpoints
-logs/
-*.log
+# Wir wollen den checkpoints Ordner behalten, aber keine schweren Dateien darin
+experiments/checkpoints/*
+!experiments/checkpoints/.gitkeep
+!experiments/checkpoints/history.json
+!experiments/checkpoints/history_cbm.json
 
-# Jupyter Notebooks
+# --- Jupyter Notebooks ---
 .ipynb_checkpoints
