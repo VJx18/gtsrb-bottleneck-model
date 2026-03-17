@@ -55,7 +55,7 @@ def train_label_predictor(config=Config()):
 
     early_stopper = EarlyStopper(patience=config.training.patience)
     train_losses, val_losses = [], []
-    val_accuracies = []
+    train_accuracies, val_accuracies = [], []
 
     print(f"\nStage 2 Training started: Label Predictor ({config.training.epochs} epochs)")
 
@@ -101,6 +101,7 @@ def train_label_predictor(config=Config()):
         epoch_train_loss = running_loss / len(train_loader)
         train_acc = 100 * correct_labels / total_labels
         train_losses.append(epoch_train_loss)
+        train_accuracies.append(train_acc)
 
         # --- Validation ---
         cbm_model.eval()
@@ -145,7 +146,7 @@ def train_label_predictor(config=Config()):
 
     # Save History
     with open(os.path.join(config.training.checkpoint_dir, "history_cbm.json"), 'w') as f:
-        json.dump({'train_loss': train_losses, 'val_loss': val_losses, 'val_acc': val_accuracies}, f)
+        json.dump({'train_loss': train_losses, 'val_loss': val_losses, 'train_acc': train_accuracies, 'val_acc': val_accuracies}, f)
 
     # Plot Validation and Loss Curves
     plt.figure(figsize=(12, 10))
