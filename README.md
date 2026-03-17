@@ -26,10 +26,10 @@ This project emphasizes software engineering best practices, including modular c
 │   ├── training/               # Training loops and sequential training logic
 │   └── utils/                  # Helper utilities (EarlyStopping, Metrics)
 ├── tests/                      # Unit tests for project modules
-├── train.py                    # CLI entry point for training
+├── README.md                   # Project documentation
 ├── evaluate.py                 # CLI entry point for evaluation
 ├── requirements.txt            # Python dependencies
-└── README.md                   # Project documentation
+└── train.py                    # CLI entry point for training 
 ```
 
 ## 🚀 Installation & Setup
@@ -105,7 +105,7 @@ python train.py --epochs 60 --lr 0.001 --seed 42
 ### Evaluation
 To evaluate a trained model on the test set and generate concept-level metrics:
 ```bash
-python evaluate.py --checkpoint experiments/checkpoints/best_concept_model.pth
+python evaluate.py --checkpoint experiments/checkpoints/best_cbm_model.pth
 ```
 
 **CLI Arguments:**

@@ -1,8 +1,8 @@
 import argparse
 import torch
 from src.config.config import Config
-from src.training.train_cbm import train_label_predictor
-from scripts.train_concept_predictor import train_concept_predictor
+from src.training.stage2 import train_label_predictor
+from src.training.stage1 import train_concept_predictor
 
 def main():
     parser = argparse.ArgumentParser(description='Train CBM Model')
