@@ -148,14 +148,23 @@ def train_label_predictor(config=Config()):
     with open(os.path.join(config.training.checkpoint_dir, "history_cbm.json"), 'w') as f:
         json.dump({'train_loss': train_losses, 'val_loss': val_losses, 'train_acc': train_accuracies, 'val_acc': val_accuracies}, f)
 
-    # Plot Validation and Loss Curves
-    plt.figure(figsize=(12, 10))
-    plt.plot(train_losses, label="Training Loss")
-    plt.plot(val_losses, label="Validation Loss")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.legend()
-    plt.title("Training and Validation Loss Curves - Label Predictor")
+    # plot train and validation loss curves
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    ax1.plot(train_losses, label="Training Loss")
+    ax1.plot(val_losses, label="Validation Loss")
+    ax1.set_xlabel("Epoch")
+    ax1.set_ylabel("Loss")
+    ax1.legend()
+    ax1.set_title("Loss Curves - Label Predictor")
+
+    ax2.plot(train_accuracies, label="Training Accuracy")
+    ax2.plot(val_accuracies, label="Validation Accuracy")
+    ax2.set_xlabel("Epoch")
+    ax2.set_ylabel("Accuracy")
+    ax2.legend()
+    ax2.set_title("Accuracy Curves - Label Predictor")
+
+    plt.tight_layout()
     loss_curve_path = os.path.join(config.training.checkpoint_dir, "loss_curves_label.png")
     plt.savefig(loss_curve_path)
     plt.close()
