@@ -10,7 +10,7 @@ class DatasetConfig:
     concept_csv: str = "./data/concepts_per_class.csv"
     class_id_test_csv: str = "./data/GT-final_test.csv"
     num_classes: int = 43
-    image_size: Tuple[int, int] = (32, 32)
+    image_size: Tuple[int, int] = (224, 224)
     val_split: float = 0.2
     batch_size: int = 64
     num_workers: int = 4
@@ -21,7 +21,7 @@ class ModelConfig:
     ##Configuration for model architecture parameters
     backbone: str = "efficientnet_v2_s"
     num_concepts: int = 43
-    dropout: float = 0.3
+    dropout: float = 0.15
 
 @dataclass
 class TrainingConfig:
