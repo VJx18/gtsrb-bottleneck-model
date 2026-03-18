@@ -53,7 +53,7 @@ def train_label_predictor(config=Config()):
     # calculate weights
     label_counts = torch.bincount(torch.tensor([label for _, (_ ,label) in train_loader.dataset]))
     weights = 1.0 / (label_counts + 1e-8)
-    weights.to(device)
+    weights = weights.to(device)
 
     # CrossEntropyLoss für Multi-Class Classification (Verkehrsschilder)
     criterion = nn.CrossEntropyLoss(weight=weights)

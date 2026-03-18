@@ -30,7 +30,7 @@ def train_concept_predictor(config=Config()):
     model = model.to(device)
 
     # initialize pos_weights to improve predictions of rare concepts
-    concepts_counts = torch.zeros(config.dataset.num_classes, device=device)
+    concepts_counts = torch.zeros(config.dataset.num_classes)
     total_counts = 0
 
     for _, (concepts, _) in train_loader:
@@ -39,7 +39,7 @@ def train_concept_predictor(config=Config()):
     
     pos_weight = (total_counts - concepts_counts) / (concepts_counts + 1e-8)
     pos_weight = torch.clamp(pos_weight, max=100.0)
-    pos_weight.to(device)
+    pos_weight = pos_weight.to(device)
 
     # training setup 
     # We use BCEWithLogitsLoss because concepts are binary
