@@ -50,8 +50,13 @@ def train_label_predictor(config=Config()):
     # Wir optimieren NUR die Parameter des Label Predictors
     optimizer = optim.Adam(cbm_model.label_predictor.parameters(), lr=config.training.lr)
 
+    # calculate weights
+    label_counts = torch.bincount(torch.tensor([label for _, (_ ,label) in train_loader.dataset]))
+    weights = 1.0 / (label_counts + 1e-8)
+    weights.to(device)
+
     # CrossEntropyLoss für Multi-Class Classification (Verkehrsschilder)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(weight=weights)
 
     early_stopper = EarlyStopper(patience=config.training.patience)
     train_losses, val_losses = [], []
@@ -66,13 +71,14 @@ def train_label_predictor(config=Config()):
         # aber Dropout im CP wäre aktiv. Oft will man CP im Eval mode lassen.
         # Im strikten CBM Sinne lassen wir CP komplett im eval mode:)
         cbm_model.concept_predictor.eval()
-        cbm_model.label_predictor.train()
+        
 
         running_loss = 0.0
         correct_labels = 0
         total_labels = 0
 
         for i, (images, (concept_targets, labels)) in enumerate(train_loader):
+            cbm_model.label_predictor.train()
             images, labels = images.to(device), labels.to(device)
             # concept_targets brauchen wir hier nicht zwingend für den Loss,
             # da wir labels vorhersagen wollen.
@@ -90,10 +96,15 @@ def train_label_predictor(config=Config()):
 
             running_loss += loss.item()
 
-            # Accuracy tracken
-            _, predicted = torch.max(label_logits.data, 1)
-            total_labels += labels.size(0)
-            correct_labels += (predicted == labels).sum().item()
+            # calculate train accuracy (but only for every 50th Batch to save time)
+            if ((i + 1) % 50 == 0):
+                with torch.no_grad():
+                    # deactivates dropout -> important for correct Train Acc!
+                    cbm_model.label_predictor.eval()
+                    _, predicted = torch.max(label_logits.data, 1)
+                    total_labels += labels.size(0)
+                    correct_labels += (predicted == labels).sum().item()
+                    print(f"Batch {i+1} / {len(train_loader)} | Train acc: {correct_labels / total_labels:.4f}")
 
             if (i + 1) % 100 == 0:
                 print(f"Epoch {epoch + 1} | Batch {i + 1} | Loss: {loss.item():.4f}")

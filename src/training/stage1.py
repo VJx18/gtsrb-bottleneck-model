@@ -29,9 +29,21 @@ def train_concept_predictor(config=Config()):
     model = ConceptPredictor(num_concepts=num_concepts, dropout=config.model.dropout)
     model = model.to(device)
 
+    # initialize pos_weights to improve predictions of rare concepts
+    concepts_counts = torch.zeros(config.dataset.num_classes, device=device)
+    total_counts = 0
+
+    for _, (concepts, _) in train_loader:
+        concepts_counts += concepts.sum(dim=0)
+        total_counts += concepts.size(0)
+    
+    pos_weight = (total_counts - concepts_counts) / (concepts_counts + 1e-8)
+    pos_weight = torch.clamp(pos_weight, max=100.0)
+    pos_weight.to(device)
+
     # training setup 
     # We use BCEWithLogitsLoss because concepts are binary
-    criterion = nn.BCEWithLogitsLoss()
+    criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     optimizer = optim.Adam(model.parameters(), lr=config.training.lr)
     
     # Using EarlyStopper
@@ -41,13 +53,13 @@ def train_concept_predictor(config=Config()):
     train_accs, val_accs = [], []
 
     print(f"\nStage 1 training started: Concept Predictor ({config.training.epochs} epochs)")
-    for epoch in range(config.training.epochs):
-        model.train()
+    for epoch in range(config.training.epochs): 
         running_loss = 0.0
         total_train = 0
         correct_train = 0
 
         for i, (images, (concepts, labels)) in enumerate(train_loader):
+            model.train()
             images, concepts = images.to(device), concepts.to(device)
 
             optimizer.zero_grad()
@@ -59,10 +71,15 @@ def train_concept_predictor(config=Config()):
 
             running_loss += loss.item()
 
-            # Accuracy calculation for concepts per batch
-            preds = (torch.sigmoid(outputs) > 0.5).float()
-            total_train += concepts.numel()
-            correct_train += (preds == concepts).sum().item()
+            # calculate train accuracy (but only for every 50th Batch to save time)
+            if ((i + 1) % 50 == 0):
+                with torch.no_grad():
+                    # deactivates dropout -> important for correct Train Acc!
+                    model.eval()
+                    preds = (torch.sigmoid(outputs) > 0.5).float()
+                    total_train += concepts.numel()
+                    correct_train += (preds == concepts).sum().item()
+                    print(f"Batch {i+1} / {len(train_loader)} | Train acc: {correct_train / total_train:.4f}")
 
             if (i + 1) % 100 == 0:
                 print(f"Epoch {epoch+1} | Batch {i+1}/{len(train_loader)} | Current Batch Loss: {loss.item():.4f}")

@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchvision import models
 
 class ConceptPredictor(nn.Module):
-    def __init__(self, num_concepts=15, dropout=0.3):
+    def __init__(self, num_concepts=43, dropout=0.15):
         super(ConceptPredictor, self).__init__()
 
         # using efficientnet_v2_s as backbone
