@@ -19,7 +19,7 @@ def main():
         config.dataset.test_images = args.data_path_testing
 
     # evaluate model
-    _, val_loader, test_loader = get_dataloaders(config)
+    _, _, test_loader = get_dataloaders(config)
     evaluate_cbm_model(config=config, test_loader=test_loader)
 
 if __name__ == '__main__':
