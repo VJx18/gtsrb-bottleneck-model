@@ -11,10 +11,12 @@ This project emphasizes software engineering best practices, including modular c
 ```plaintext
 .
 ├── data/                       # Dataset directory (git-ignored)
-│   ├── GTSRB/                  # Raw image data
-│   │   ├── Final_Training/     # Training images folder
+│   ├── GTSRB/                  # Raw image data for training
+│   │   └── Final_Training/     # Training images folder
+│   ├── GTSRB 2/                # Raw image data for Test
 │   │   └── Final_Test/         # Test images folder
 │   ├── concept_per_class.csv   # Concept annotations mapping classes to attributes
+|   |── GT-final_test.csv       # csv file with labels for testset
 │   └── processed/              # (Optional) Cache for preprocessed tensors
 ├── experiments/                # Training artifacts
 │   └── checkpoints/            # Directory where trained models (.pth) will be saved
@@ -63,18 +65,21 @@ To run the model, you need the GTSRB dataset and the provided concept annotation
 
 ### 2. Concept Annotations:
 - Place the `concept_per_class.csv` file directly in the `data/` folder. This file maps each of the 43 classes to binary feature vectors.
+- `GT-final_test.csv` must be downloaded separately
 
 **Expected File Hierarchy:**
 ```plaintext
 data/
 ├── concept_per_class.csv
-└── GTSRB/
-    ├── Final_Training/
-    │   └── Images/
-    │       ├── 00000/
-    │       │   ├── 00000_00000.ppm
-    │       │   └── ...
-    │       └── ...
+├── GT-final_test.csv
+|── GTSRB/
+|   └── Final_Training/
+|      └── Images/
+|          ├── 00000/
+|          │   ├── 00000_00000.ppm
+|          │   └── ...
+|          └── ...
+└── GTSRB 2/
     └── Final_Test/
         └── Images/
             ├── 00000.ppm
@@ -87,7 +92,7 @@ The project provides Command Line Interfaces (CLI) for both training and evaluat
 ### Training (End-to-End)
 To train the complete CBM pipeline sequentially, run the following command:
 ```bash
-python train.py --epochs 60 --lr 0.001 --seed 42
+python train.py --epochs 60 --lr 0.0001 --seed 42 --patience 6
 ```
 
 ### What happens during training?
